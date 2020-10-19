@@ -54,5 +54,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="status" />
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/favoriteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Favorite"
+        android:textColor="@android:color/holo_red_dark"
+        app:layout_constraintBottom_toTopOf="@+id/status"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,9 +13,11 @@ import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.restaurant_list_item.view.*
 import java.util.*
 
-class RestaurantListAdapter(private val shops: List<Restaurant>) : RecyclerView.Adapter<RestaurantListAdapter.RestaurantViewHolder>() {
+class RestaurantListAdapter(private val shops: List<Restaurant>,
+                            private val favShops: List<String>? = null) : RecyclerView.Adapter<RestaurantListAdapter.RestaurantViewHolder>() {
 
     var onItemClick: ((Restaurant) -> Unit)? = null
+    var onFavClick: ((Restaurant) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RestaurantViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.restaurant_list_item, parent, false)
@@ -33,12 +35,17 @@ class RestaurantListAdapter(private val shops: List<Restaurant>) : RecyclerView.
                 itemView.setOnClickListener {
                     onItemClick?.invoke(shops[adapterPosition])
                 }
+                itemView.favoriteButton.setOnClickListener {
+                    onFavClick?.invoke(shops[adapterPosition])
+                }
             }
         val imageView: ImageView = itemView.restaurantImageView
         val name: TextView = itemView.itemName
         val description: TextView = itemView.itemDescription
         val deliveryFee: TextView = itemView.deliveryFee
         val status: TextView = itemView.status
+        val favoriteButton: TextView = itemView.favoriteButton
+
         fun bind(shop: Restaurant) {
             Glide
                 .with(itemView)
@@ -51,7 +58,13 @@ class RestaurantListAdapter(private val shops: List<Restaurant>) : RecyclerView.
             if (shop.status.toLowerCase(Locale.US).contains("closed"))
                 status.setTextColor(ContextCompat.getColor(itemView.context, R.color.colorPrimary))
             status.text = shop.status
-
+            favoriteButton.apply {
+                if (favShops != null
+                    && favShops.contains(shops[adapterPosition].id)) {
+                    text = "Unfavorite"
+                    setTextColor(ContextCompat.getColor(itemView.context, R.color.design_default_color_primary_dark))
+                }
+            }
         }
     }
 }
